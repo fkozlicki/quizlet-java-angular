@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quizlet
+    username: postgres
+    password: filox202
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  main:
+    web-application-type: servlet
+server:
+  error:
+    include-message: always
+
+#application:
+#  security:
+#    jwt:
+#      secret-key: ${JWT_SECRET_KEY}
+#      expiration: 900000 #1 minute
+#      refresh-token:
+#        expiration: 604800000 #1 day
