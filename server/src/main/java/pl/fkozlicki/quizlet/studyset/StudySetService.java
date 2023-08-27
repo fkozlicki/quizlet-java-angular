@@ -4,16 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fkozlicki.quizlet.exception.ResourceNotFoundException;
 import pl.fkozlicki.quizlet.flashcard.Flashcard;
-import pl.fkozlicki.quizlet.flashcard.FlashcardPart;
 import pl.fkozlicki.quizlet.flashcard.FlashcardRepository;
 import pl.fkozlicki.quizlet.user.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -103,37 +100,4 @@ public class StudySetService {
 
         return studySetDTOMapper.apply(editedStudySet);
     }
-
-    public List<FlashcardPart> getMatchCards(Integer studySetId) {
-        int MATCH_CARDS_COUNT = 3;
-
-        List<Flashcard> allFlashcards = studySetRepository
-                .findById(studySetId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Study set with id %d not found".formatted(studySetId)
-                ))
-                .getFlashcards();
-
-        Collections.shuffle(allFlashcards);
-
-        List<FlashcardPart> matchCards = allFlashcards
-                .subList(0, allFlashcards.size() == 2 ? 2 : MATCH_CARDS_COUNT)
-                .stream()
-                .flatMap(flashcard -> Stream.of(
-                        new FlashcardPart(flashcard.getId(), flashcard.getTerm()),
-                        new FlashcardPart(flashcard.getId(), flashcard.getDefinition())
-                ))
-                .collect(Collectors.toList());
-
-        Collections.shuffle(matchCards);
-
-        return  matchCards;
-    }
-
-
-
-    public Test getTest(Integer studySetId) {
-
-    }
-
 }
