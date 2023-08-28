@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { StudySetService } from 'src/app/services/study-set.service';
@@ -42,7 +42,7 @@ interface MatchCard {
   `,
   styles: [],
 })
-export class MatchComponent {
+export class MatchComponent implements OnInit {
   setId = +this.route.snapshot.params['setId'];
   studySetQuery: any;
   matchCards?: MatchCard[];
