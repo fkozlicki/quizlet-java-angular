@@ -18,20 +18,16 @@ import { SessionService } from './services/session.service';
     LoginModalComponent,
   ],
   template: `
-    <ng-container>
-      <app-navbar (toggleLoginModal)="toggleLoginModal($event)"></app-navbar>
-      <app-signup-modal
-        *ngIf="modalService.signupModalOpen"
-        (openLoginModal)="toggleLoginModal(true)"
-      ></app-signup-modal>
-      <app-login-modal
-        *ngIf="loginModalOpen"
-        (closeLoginModal)="toggleLoginModal(false)"
-      ></app-login-modal>
-      <div class="min-h-[calc(100vh-4rem)] bg-indigo-50 py-10">
-        <router-outlet></router-outlet>
-      </div>
-    </ng-container>
+    <app-navbar (toggleLoginModal)="toggleLoginModal($event)"></app-navbar>
+    <app-signup-modal
+      *ngIf="modalService.signupModalOpen"
+      (openLoginModal)="toggleLoginModal(true)"
+    ></app-signup-modal>
+    <app-login-modal
+      *ngIf="loginModalOpen"
+      (closeLoginModal)="toggleLoginModal(false)"
+    ></app-login-modal>
+    <router-outlet></router-outlet>
   `,
 })
 export class AppComponent implements OnInit {
