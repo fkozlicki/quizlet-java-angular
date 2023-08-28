@@ -41,9 +41,15 @@ export class StudySetService {
   }
 
   getStudySet(id: number) {
-    return this.useQuery(['studySet'], () => {
-      return this.http.get<StudySet>(`${this.apiUrl}/${id}`);
-    });
+    return this.useQuery(
+      ['studySet'],
+      () => {
+        return this.http.get<StudySet>(`${this.apiUrl}/${id}`);
+      },
+      {
+        refetchOnWindowFocus: false,
+      },
+    );
   }
 
   deleteStudySet() {
