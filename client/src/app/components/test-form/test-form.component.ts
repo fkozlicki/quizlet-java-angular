@@ -54,9 +54,10 @@ import { MatButtonModule } from '@angular/material/button';
                 class='peer-checked:bg-blue-50" cursor-pointer rounded-md border-2 px-4 py-2 text-center peer-checked:border-blue-600'
               >
                 True
-              </div></label
-            ><label [for]="'trueFalse-' + i + '-false'" class="flex-1"
-              ><input
+              </div>
+            </label>
+            <label [for]="'trueFalse-' + i + '-false'" class="flex-1">
+              <input
                 formControlName="userAnswer"
                 [id]="'trueFalse-' + i + '-false'"
                 [value]="false"
@@ -67,8 +68,8 @@ import { MatButtonModule } from '@angular/material/button';
                 class="cursor-pointer rounded-md border-2 px-4 py-2 text-center peer-checked:border-blue-600 peer-checked:bg-blue-50"
               >
                 False
-              </div></label
-            >
+              </div>
+            </label>
           </div>
         </div>
       </div>
