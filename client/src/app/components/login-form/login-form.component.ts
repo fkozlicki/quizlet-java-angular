@@ -103,7 +103,7 @@ export class LoginFormComponent {
       }),
     },
     {
-      updateOn: 'blur',
+      updateOn: 'change',
     },
   );
   @Output() closeLoginModal = new EventEmitter();

@@ -188,7 +188,7 @@ export class SignupFormComponent {
       }),
     },
     {
-      updateOn: 'blur',
+      updateOn: 'change',
     },
   );
   @Output() openLoginModal = new EventEmitter();
