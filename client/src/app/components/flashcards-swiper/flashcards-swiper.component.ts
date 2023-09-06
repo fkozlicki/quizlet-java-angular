@@ -88,13 +88,13 @@ export class FlashcardsSwiperComponent implements OnInit {
   }
 
   onForward() {
-    if (this.currentIndex < this.flashcards.length - 1) {
-      this.currentIndex++;
-      this.currentFlashcard = this.flashcards[this.currentIndex];
-    }
     if (this.currentIndex === this.flashcards.length - 1) {
       this.currentIndex++;
       this.finished = true;
+    }
+    if (this.currentIndex < this.flashcards.length - 1) {
+      this.currentIndex++;
+      this.currentFlashcard = this.flashcards[this.currentIndex];
     }
   }
 
