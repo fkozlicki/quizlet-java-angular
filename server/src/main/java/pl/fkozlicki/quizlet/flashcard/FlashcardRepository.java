@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FlashcardRepository extends JpaRepository<Flashcard, Integer> {
+    void deleteAllByStudySetId(Integer studySetId);
 }

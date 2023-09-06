@@ -1,13 +1,11 @@
 package pl.fkozlicki.quizlet.flashcard;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.fkozlicki.quizlet.studyset.StudySet;
 
 @Entity
 @Data
@@ -20,4 +18,6 @@ public class Flashcard {
     private Integer id;
     private String term;
     private String definition;
+    @ManyToOne
+    private StudySet studySet;
 }

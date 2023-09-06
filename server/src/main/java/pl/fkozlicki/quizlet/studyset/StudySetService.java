@@ -82,19 +82,26 @@ public class StudySetService {
                         "Study set with id %d not found".formatted(studySet.id())
                 ));
 
+
         studySetToEdit.setTitle(studySet.title());
         studySetToEdit.setDescription(studySet.description());
-        studySetToEdit.setFlashcards(studySet
-                .flashcards()
-                .stream()
-                .map(flashcardDTO -> Flashcard
-                        .builder()
-                        .id(flashcardDTO.id())
-                        .term(flashcardDTO.term())
-                        .definition(flashcardDTO.definition())
-                        .build()
-                )
-                .collect(Collectors.toList()));
+
+        flashcardRepository.deleteAllByStudySetId(studySetToEdit.getId());
+
+        List<Flashcard> flashcards = flashcardRepository.saveAll(
+                studySet
+                        .flashcards()
+                        .stream()
+                        .map(flashcard -> Flashcard
+                                .builder()
+                                .term(flashcard.term())
+                                .definition(flashcard.definition())
+                                .build()
+                        )
+                        .collect(Collectors.toList())
+        );
+
+        studySetToEdit.setFlashcards(flashcards);
 
         StudySet editedStudySet = studySetRepository.save(studySetToEdit);
 
