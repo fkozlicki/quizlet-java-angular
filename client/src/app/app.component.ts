@@ -27,7 +27,11 @@ import { SessionService } from './services/session.service';
       *ngIf="loginModalOpen"
       (closeLoginModal)="toggleLoginModal(false)"
     ></app-login-modal>
-    <router-outlet></router-outlet>
+    <div class="flex min-h-[calc(100vh-4rem)] bg-indigo-50 p-4 md:p-8">
+      <div class="flex-1">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   `,
 })
 export class AppComponent implements OnInit {
