@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ManageFolderModalComponent } from '../manage-folder-modal/manage-folder-modal.component';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -23,14 +23,19 @@ import { MatButtonModule } from '@angular/material/button';
   `,
   styles: [],
 })
-export class FolderEmptyComponent {
+export class FolderEmptyComponent implements OnDestroy {
   @Input() folder!: Folder;
   @Input() userId!: number;
+  manageFolderRef?: MatDialogRef<ManageFolderModalComponent>;
 
   constructor(public dialog: MatDialog) {}
 
+  ngOnDestroy(): void {
+    this.manageFolderRef?.close();
+  }
+
   openDialog() {
-    this.dialog.open(ManageFolderModalComponent, {
+    this.manageFolderRef = this.dialog.open(ManageFolderModalComponent, {
       data: {
         folderId: this.folder.id,
         userId: this.userId,

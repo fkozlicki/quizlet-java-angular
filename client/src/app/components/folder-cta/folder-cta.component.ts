@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PicturePlaceholderComponent } from '../picture-placeholder/picture-placeholder.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ManageFolderModalComponent } from '../manage-folder-modal/manage-folder-modal.component';
 import { FolderModalComponent } from '../folder-modal/folder-modal.component';
 import { DeleteModalComponent } from '../delete-modal/delete-modal.component';
@@ -47,14 +47,19 @@ import { DeleteModalComponent } from '../delete-modal/delete-modal.component';
     </div>
   `,
 })
-export class FolderCtaComponent {
+export class FolderCtaComponent implements OnDestroy {
   @Input() folder!: Folder;
   @Input() userId!: number;
+  manageFolderRef?: MatDialogRef<ManageFolderModalComponent>;
 
   constructor(public dialog: MatDialog) {}
 
+  ngOnDestroy(): void {
+    this.manageFolderRef?.close();
+  }
+
   openDialog() {
-    this.dialog.open(ManageFolderModalComponent, {
+    this.manageFolderRef = this.dialog.open(ManageFolderModalComponent, {
       data: {
         folderId: this.folder.id,
         userId: this.userId,
