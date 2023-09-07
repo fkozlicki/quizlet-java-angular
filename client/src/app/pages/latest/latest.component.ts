@@ -6,6 +6,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { StudysetPreviewComponent } from 'src/app/components/studyset-preview/studyset-preview.component';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-latest',
@@ -16,11 +17,18 @@ import { RouterModule } from '@angular/router';
     StudysetPreviewComponent,
     MatButtonModule,
     RouterModule,
+    MatProgressSpinnerModule,
   ],
   template: `
-    <div class="m-auto max-w-7xl">
-      <div *ngIf="studySetsResult?.data as studySets">
-        <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+    <div *subscribe="studySets$ as studySets" class="m-auto h-full max-w-7xl">
+      <div
+        *ngIf="studySets.data as studySets"
+        [ngClass]="{ 'h-full': studySets.length === 0 }"
+      >
+        <div
+          *ngIf="studySets.length > 0"
+          class="grid gap-3 sm:grid-cols-2 md:grid-cols-3"
+        >
           <app-studyset-preview
             *ngFor="let studySet of studySets"
             [id]="studySet.id"
@@ -29,7 +37,10 @@ import { RouterModule } from '@angular/router';
             [userName]="studySet.user.name"
           ></app-studyset-preview>
         </div>
-        <div *ngIf="studySets.length === 0" class="flex justify-center">
+        <div
+          *ngIf="studySets.length === 0"
+          class="grid h-full place-items-center"
+        >
           <div class="text-center">
             <div class="mb-5 text-3xl font-bold">
               You don't have any study sets yet.
@@ -40,27 +51,40 @@ import { RouterModule } from '@angular/router';
           </div>
         </div>
       </div>
-      <div *ngIf="studySetsResult.isLoading"></div>
+      <div *ngIf="studySets.error" class="grid h-full place-items-center">
+        <div class="text-center">
+          <div class="mb-5 text-3xl font-bold">
+            Something went wrong. Couldn't load your study sets.
+          </div>
+          <button
+            mat-flat-button
+            color="primary"
+            class="block"
+            (click)="tryAgain()"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+      <div *ngIf="studySets.isLoading" class="grid h-full place-items-center">
+        <mat-spinner></mat-spinner>
+      </div>
     </div>
   `,
   styles: [],
 })
-export class LatestComponent implements OnInit {
-  studySetsResult: any;
+export class LatestComponent {
+  studySets$ = this.studySetService.getUserSets(this.sessionService.user!.id)
+    .result$;
 
   constructor(
     private studySetService: StudySetService,
     private sessionService: SessionService,
   ) {}
 
-  ngOnInit(): void {
-    const user = this.sessionService.user;
-    if (user) {
-      this.studySetsResult = this.studySetService
-        .getUserSets(user.id)
-        .result$.subscribe((data) => {
-          this.studySetsResult = data;
-        });
-    }
+  tryAgain() {
+    this.studySets$.subscribe((data) => {
+      data.refetch();
+    });
   }
 }
