@@ -80,16 +80,16 @@ import { FolderModalComponent } from '../folder-modal/folder-modal.component';
             <div class="min-w-[150px]">
               <button
                 (click)="onCreateStudySet()"
-                class="w-full px-6 py-2 text-start hover:bg-slate-100"
+                class="block w-full px-6 py-2 text-start hover:bg-slate-100"
               >
                 Study set
               </button>
-              <div
+              <button
                 (click)="openCreateFolderModal()"
-                class="w-full px-6 py-2 text-start hover:bg-slate-100"
+                class="block w-full px-6 py-2 text-start hover:bg-slate-100"
               >
                 Folder
-              </div>
+              </button>
             </div>
           </mat-menu>
         </div>
@@ -104,13 +104,15 @@ import { FolderModalComponent } from '../folder-modal/folder-modal.component';
               <a
                 [routerLink]="[sessionService.user.id]"
                 class="block w-full px-6 py-2 text-start hover:bg-slate-100"
-                >Profile</a
               >
+                Profile
+              </a>
               <a
                 [routerLink]="['settings']"
                 class="block w-full px-6 py-2 text-start hover:bg-slate-100"
-                >Settings</a
               >
+                Settings
+              </a>
               <button
                 (click)="onLogout()"
                 class="block w-full px-6 py-2 text-start hover:bg-slate-100"
