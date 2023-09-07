@@ -99,6 +99,7 @@ export class FolderModalComponent {
     if (this.data.type === 'create') {
       this.createFolderMutation.mutate({ name, description }).then(() => {
         this.dialogRef.close();
+        this.queryClient.invalidateQueries(['userFolders']);
       });
     } else {
       if (!this.data.folder) {
