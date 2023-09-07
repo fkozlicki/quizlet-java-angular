@@ -21,11 +21,12 @@ import {
       (click)="onClick()"
       [ngClass]="{
         'border-blue-500 bg-blue-50': selected,
-        'hover:bg-gray-100': !selected && !mismatch && !match,
+        'border-gray-300 bg-white hover:bg-gray-100':
+          !selected && !mismatch && !match,
         'border-orange-500 bg-orange-50': mismatch,
         'border-green-500 bg-green-50': match
       }"
-      class="grid h-full w-full cursor-pointer place-items-center rounded-2xl border-2 border-gray-300 bg-white"
+      class="grid h-full w-full cursor-pointer place-items-center rounded-2xl border-2"
     >
       {{ content }}
     </div>
