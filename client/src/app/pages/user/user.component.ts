@@ -7,7 +7,11 @@ import { UserLayoutComponent } from 'src/app/components/user-layout/user-layout.
   selector: 'app-user',
   standalone: true,
   imports: [CommonModule, SubscribeDirective, UserLayoutComponent],
-  template: `<app-user-layout></app-user-layout> `,
+  template: `<app-user-layout>
+    <div class="grid h-full place-items-center">
+      <div class="text-3xl font-bold">WIP</div>
+    </div>
+  </app-user-layout> `,
   styles: [],
 })
 export class UserComponent {}
