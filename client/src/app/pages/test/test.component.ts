@@ -47,7 +47,9 @@ export interface Answers {
     TestResultComponent,
   ],
   template: `
-    <div class="m-auto max-w-[55rem] p-4 sm:p-10">
+    <div
+      class="m-auto grid h-full max-w-[55rem] place-items-center p-4 sm:p-10"
+    >
       <app-test-form
         *ngIf="test && !userAnswers"
         [test]="test"
