@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
-  template: `<div class="flex w-full flex-1">
-    <div class="text-2xl font-bold text-indigo-500">Welcome to Quizletv2</div>
+  template: `<div class="grid h-full place-items-center">
+    <div class="text-3xl font-bold text-indigo-500">Welcome to Quizletv2</div>
   </div>`,
   styles: [],
 })
