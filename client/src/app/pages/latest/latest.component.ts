@@ -45,9 +45,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             <div class="mb-5 text-3xl font-bold">
               You don't have any study sets yet.
             </div>
-            <a [routerLink]="['/create-set']" mat-flat-button color="primary"
-              >Create set</a
-            >
+            <a [routerLink]="['/create-set']" mat-flat-button color="primary">
+              Create set
+            </a>
           </div>
         </div>
       </div>
