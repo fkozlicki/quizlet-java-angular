@@ -15,6 +15,7 @@ import { StudySetsComponent } from './pages/study-sets/study-sets.component';
 import { FoldersComponent } from './pages/folders/folders.component';
 import { FolderComponent } from './pages/folder/folder.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,11 @@ export const routes: Routes = [
   {
     path: 'create-set',
     component: CreateSetComponent,
+    canActivate: [AccessGuardService],
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AccessGuardService],
   },
   {
