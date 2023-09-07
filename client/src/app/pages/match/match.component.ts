@@ -15,28 +15,26 @@ interface MatchCard {
   standalone: true,
   imports: [CommonModule, MatchCardComponent],
   template: `
-    <div class="flex min-h-[calc(100vh-4rem)] bg-indigo-50 py-8">
-      <div class="mx-auto max-w-7xl flex-1">
-        <div>{{ ellapsedTime.toFixed(1) }}</div>
-        <div
-          *ngIf="matchCards && !finished"
-          class="grid min-h-full w-full grid-cols-2 gap-3 md:grid-cols-4"
+    <div class="mx-auto flex h-full max-w-7xl flex-col">
+      <div>{{ ellapsedTime.toFixed(1) }}</div>
+      <div
+        *ngIf="matchCards && !finished"
+        class="grid h-full w-full grid-cols-2 gap-3 md:grid-cols-4"
+      >
+        <app-match-card
+          *ngFor="let card of matchCards"
+          [content]="card.content"
+          [selected]="card.id === first?.id || card.id === second?.id"
+          [mismatch]="isMismatch(card)"
+          [match]="isMatch(card)"
+          (select)="selectCard(card)"
+          (clearMismatch)="clearMismatch()"
         >
-          <app-match-card
-            *ngFor="let card of matchCards"
-            [content]="card.content"
-            [selected]="card.id === first?.id || card.id === second?.id"
-            [mismatch]="isMismatch(card)"
-            [match]="isMatch(card)"
-            (select)="selectCard(card)"
-            (clearMismatch)="clearMismatch()"
-          >
-            {{ card.content }}
-          </app-match-card>
-        </div>
-        <div *ngIf="finished">
-          Congrats you have finished {{ ellapsedTime.toFixed(1) }}
-        </div>
+          {{ card.content }}
+        </app-match-card>
+      </div>
+      <div *ngIf="finished">
+        Congrats you have finished {{ ellapsedTime.toFixed(1) }}
       </div>
     </div>
   `,
