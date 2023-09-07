@@ -14,6 +14,7 @@ import { UserComponent } from './pages/user/user.component';
 import { StudySetsComponent } from './pages/study-sets/study-sets.component';
 import { FoldersComponent } from './pages/folders/folders.component';
 import { FolderComponent } from './pages/folder/folder.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -71,5 +72,9 @@ export const routes: Routes = [
     path: 'study-set/:setId/edit',
     component: EditSetComponent,
     canActivate: [AccessGuardService],
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
