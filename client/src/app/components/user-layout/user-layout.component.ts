@@ -15,7 +15,7 @@ import { PicturePlaceholderComponent } from '../picture-placeholder/picture-plac
     RouterModule,
   ],
   template: `
-    <div class="m-auto max-w-7xl">
+    <div class="m-auto flex h-full max-w-7xl flex-col">
       <div *subscribe="userQuery$ as userQuery">
         <div *ngIf="userQuery.data as user">
           <div class="mb-6 flex items-center gap-6">
@@ -56,7 +56,9 @@ import { PicturePlaceholderComponent } from '../picture-placeholder/picture-plac
           </div>
         </div>
       </div>
-      <ng-content></ng-content>
+      <div class="flex-1">
+        <ng-content></ng-content>
+      </div>
     </div>
   `,
   styles: [],
