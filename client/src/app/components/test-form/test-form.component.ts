@@ -51,7 +51,7 @@ import { MatButtonModule } from '@angular/material/button';
                 class="peer hidden"
               />
               <div
-                class='peer-checked:bg-blue-50" cursor-pointer rounded-md border-2 px-4 py-2 text-center peer-checked:border-blue-600'
+                class='peer-checked:bg-blue-50" cursor-pointer rounded-md border-2 px-4 py-2 text-center peer-checked:border-blue-600 peer-checked:bg-blue-50'
               >
                 True
               </div>
