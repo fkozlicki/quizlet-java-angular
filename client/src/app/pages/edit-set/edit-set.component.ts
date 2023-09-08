@@ -209,10 +209,8 @@ export class EditSetComponent implements OnInit {
             this.studySetForm.controls['id'].setValue(id);
             this.studySetForm.controls['title'].setValue(title);
             this.studySetForm.controls['description'].setValue(description);
-            this.studySetForm.controls['flashcards'];
-
             flashcards.forEach((flashcard) => {
-              (this.studySetForm.get('flashcards') as FormArray).push(
+              (this.studySetForm.controls['flashcards'] as FormArray).push(
                 new FormGroup({
                   term: new FormControl(flashcard.term),
                   definition: new FormControl(flashcard.definition),
