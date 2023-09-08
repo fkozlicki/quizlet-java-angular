@@ -45,7 +45,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
           class="hidden sm:block"
           mat-flat-button
           color="primary"
-          [disabled]="!studySetForm?.valid"
+          [disabled]="!studySetForm.valid"
           *subscribe="editStudySetMutation$.result$ as editStudySetMutation"
         >
           {{ editStudySetMutation.isLoading ? 'Loading' : 'Done' }}
@@ -180,7 +180,18 @@ export class EditSetComponent implements OnInit {
   id = +this.route.snapshot.paramMap.get('setId')!;
   isDragDisabled = false;
   editStudySetMutation$ = this.studySetService.editStudySet();
-  studySetForm?: FormGroup;
+  studySetForm: FormGroup = new FormGroup({
+    id: new FormControl<number | undefined>(undefined, {
+      validators: [Validators.required],
+    }),
+    title: new FormControl<string | undefined>(undefined, {
+      validators: [Validators.required],
+    }),
+    description: new FormControl<string | null | undefined>(undefined),
+    flashcards: new FormArray([], {
+      validators: [Validators.minLength(2)],
+    }),
+  });
 
   constructor(
     private studySetService: StudySetService,
@@ -189,28 +200,27 @@ export class EditSetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.studySetService.getStudySet(this.id).result$.subscribe(({ data }) => {
-      if (data) {
-        this.studySetForm = new FormGroup({
-          id: new FormControl<number>(data.id),
-          title: new FormControl<string>(data.title, {
-            validators: [Validators.required],
-          }),
-          description: new FormControl<string | null>(data.description),
-          flashcards: new FormArray(
-            data.flashcards.map(
-              (card) =>
+    this.route.params.subscribe((params) => {
+      this.studySetService
+        .getStudySet(+params['setId'])
+        .result$.subscribe(({ data }) => {
+          if (data) {
+            const { id, title, description, flashcards } = data;
+            this.studySetForm.controls['id'].setValue(id);
+            this.studySetForm.controls['title'].setValue(title);
+            this.studySetForm.controls['description'].setValue(description);
+            this.studySetForm.controls['flashcards'];
+
+            flashcards.forEach((flashcard) => {
+              (this.studySetForm.get('flashcards') as FormArray).push(
                 new FormGroup({
-                  term: new FormControl<string | null>(card.term),
-                  definition: new FormControl<string | null>(card.definition),
+                  term: new FormControl(flashcard.term),
+                  definition: new FormControl(flashcard.definition),
                 }),
-            ),
-            {
-              validators: [Validators.minLength(2)],
-            },
-          ),
+              );
+            });
+          }
         });
-      }
     });
   }
 
