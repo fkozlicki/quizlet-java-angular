@@ -47,9 +47,7 @@ export interface Answers {
     TestResultComponent,
   ],
   template: `
-    <div
-      class="m-auto grid h-full max-w-[55rem] place-items-center p-4 sm:p-10"
-    >
+    <div class="m-auto h-full max-w-[55rem] p-4 sm:p-10">
       <app-test-form
         *ngIf="test && !userAnswers"
         [test]="test"
@@ -59,12 +57,15 @@ export interface Answers {
         *ngIf="userAnswers"
         [userAnswers]="userAnswers"
       ></app-test-result>
-      <div *ngIf="!test">
-        <div class="text-3xl font-bold">
-          Quizlet was unable to generate a test.
-        </div>
-        <div>
-          Try adding additional question types or increasing the question limit.
+      <div *ngIf="!test" class="grid h-full place-items-center">
+        <div class="text-center">
+          <div class="mb-4 text-3xl font-bold">
+            Quizlet was unable to generate a test.
+          </div>
+          <div>
+            Try adding additional question types or increasing the question
+            limit.
+          </div>
         </div>
       </div>
     </div>
