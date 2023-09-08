@@ -58,9 +58,9 @@ public class FolderController {
         return ResponseEntity.ok().body(folderService.removeStudySetFromFolder(folderId, studySetId));
     }
 
-    @GetMapping("/list/{id}")
-    ResponseEntity<List<FolderDTO>> getUserFolders(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(folderService.getUserFolders(id));
+    @GetMapping("/list/{userId}")
+    ResponseEntity<List<FolderDTO>> getUserFolders(@PathVariable Integer userId) {
+        return ResponseEntity.ok().body(folderService.getUserFolders(userId));
     }
 
     @GetMapping("/{id}")

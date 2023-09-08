@@ -26,12 +26,15 @@ public class SecurityFilterChainConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/folder/**",
-                                "/api/v1/study-set/create",
-                                "/api/v1/study-set/edit",
-                                "/api/v1/flashcard/edit"
-                        ).authenticated()
-                        .anyRequest().permitAll()
+                                "api/v1/user/register",
+                                "/api/v1/auth/login",
+                                "/api/v1/study-set/{id}",
+                                "/api/v1/study-set/list/{userId}",
+                                "/api/v1/folder/list/{userId}",
+                                "/api/v1/folder/{id}"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
