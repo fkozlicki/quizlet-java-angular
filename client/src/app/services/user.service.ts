@@ -19,17 +19,10 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  register(openLoginModal: () => void) {
+  register() {
     return this.useMutation(
       (body: RegisterBody) => this.http.post(`${this.apiUrl}/register`, body),
-      {
-        onSuccess() {
-          openLoginModal();
-        },
-        onError(error) {
-          console.error(error);
-        },
-      },
+      {},
     );
   }
 

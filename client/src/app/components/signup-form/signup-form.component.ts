@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder,
   Validators,
   ReactiveFormsModule,
   AbstractControl,
@@ -9,6 +8,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
 import { SubscribeDirective } from '@ngneat/subscribe';
 
@@ -192,11 +192,12 @@ export class SignupFormComponent {
     },
   );
   @Output() openLoginModal = new EventEmitter();
-  registerMutation$ = this.userService.register(() => {
-    this.openLoginModal.emit();
-  });
+  registerMutation$ = this.userService.register();
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar,
+  ) {}
 
   validateDate(control: AbstractControl) {
     const year = +control.get('year')?.value;
@@ -233,11 +234,23 @@ export class SignupFormComponent {
     const { month, day, year } = birthday;
     const birthdayISODate = new Date(`${year}-${month}-${day}`).toISOString();
 
-    this.registerMutation$.mutate({
-      birthday: birthdayISODate,
-      email,
-      name,
-      password,
-    });
+    this.registerMutation$
+      .mutate({
+        birthday: birthdayISODate,
+        email,
+        name,
+        password,
+      })
+      .then(() => {
+        this.snackBar.open('Registered successfully.', undefined, {
+          duration: 3000,
+        });
+        this.openLoginModal.emit();
+      })
+      .catch((error) => {
+        this.snackBar.open(error.error.message, undefined, {
+          duration: 3000,
+        });
+      });
   }
 }
