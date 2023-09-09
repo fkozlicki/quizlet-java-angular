@@ -223,7 +223,7 @@ export class EditSetComponent implements OnInit {
   }
 
   get flashcards() {
-    return this.studySetForm?.get('flashcards') as FormArray;
+    return this.studySetForm.get('flashcards') as FormArray;
   }
 
   onSubmit() {

@@ -30,7 +30,6 @@ public class AuthService {
 
         String jwt = jwtService.generateToken(user);
 
-
         return new AuthResponse(
                 jwt,
                 userDTOMapper.apply(user)
