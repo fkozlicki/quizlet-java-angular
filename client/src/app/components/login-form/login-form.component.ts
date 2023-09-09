@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-form',
@@ -112,6 +113,7 @@ export class LoginFormComponent {
     private authService: AuthService,
     private router: Router,
     private sessionService: SessionService,
+    private snackBar: MatSnackBar,
   ) {}
 
   onSubmit() {
@@ -128,6 +130,9 @@ export class LoginFormComponent {
         this.closeLoginModal.emit();
         this.sessionService.saveUser({ ...user, token });
         this.router.navigate(['/latest']);
+      })
+      .catch((error) => {
+        this.snackBar.open(error.error.message, undefined, { duration: 3000 });
       });
   }
 }
