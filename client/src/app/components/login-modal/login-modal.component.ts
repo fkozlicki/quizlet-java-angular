@@ -25,21 +25,6 @@ import { ModalService } from 'src/app/services/modal.service';
             </button>
             <button class="text-2xl font-bold text-gray-800">Log in</button>
           </div>
-          <button
-            class="mb-4 w-full rounded-lg border border-gray-300 px-8 py-5 font-semibold text-gray-500 hover:bg-gray-100"
-          >
-            Continue with Google
-          </button>
-          <button
-            class="w-full rounded-lg border border-gray-300 px-8 py-5 font-semibold text-gray-500 hover:bg-gray-100"
-          >
-            Continue with Facebook
-          </button>
-          <div class="my-8 flex items-center">
-            <div class="h-0.5 flex-1 bg-slate-200"></div>
-            <div class="mx-4">or email</div>
-            <div class="h-0.5 flex-1 bg-slate-200"></div>
-          </div>
           <app-login-form
             (closeLoginModal)="onCloseLoginModal()"
           ></app-login-form>
