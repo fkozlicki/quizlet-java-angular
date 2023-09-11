@@ -26,7 +26,8 @@ public class SecurityFilterChainConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "api/v1/user/register",
+                                "/api/v1/user/register",
+                                "/api/v1/user/profile-image/{imageUrl}",
                                 "/api/v1/auth/login",
                                 "/api/v1/study-set/{id}",
                                 "/api/v1/study-set/list/{userId}",

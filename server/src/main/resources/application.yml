@@ -17,7 +17,8 @@ server:
   error:
     include-message: always
 
-#application:
+application:
+    bucket-name: ${AWS_S3_BUCKET_NAME}
 #  security:
 #    jwt:
 #      secret-key: ${JWT_SECRET_KEY}
