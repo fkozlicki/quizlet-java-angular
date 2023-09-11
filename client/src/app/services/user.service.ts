@@ -31,4 +31,14 @@ export class UserService {
       this.http.get<User>(`${this.apiUrl}/${id}`),
     );
   }
+
+  uploadPicture() {
+    return this.useMutation(({ formData }: { formData: FormData }) =>
+      this.http.post(`${this.apiUrl}/profile-image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+    );
+  }
 }
