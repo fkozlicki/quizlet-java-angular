@@ -25,8 +25,6 @@ public class StudySetController {
         String jwt = authHeader.substring(7);
         User user = userService.getUserByEmail(jwtService.extractUsername(jwt));
 
-        System.out.println(studySetDTO);
-
         return ResponseEntity.ok().body(studySetService.createStudySet(studySetDTO, user.getId()));
     }
 
