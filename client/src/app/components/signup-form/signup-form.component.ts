@@ -8,7 +8,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user.service';
 import { SubscribeDirective } from '@ngneat/subscribe';
 
@@ -20,6 +20,7 @@ import { SubscribeDirective } from '@ngneat/subscribe';
     ReactiveFormsModule,
     MatButtonModule,
     SubscribeDirective,
+    MatSnackBarModule,
   ],
   template: `
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
