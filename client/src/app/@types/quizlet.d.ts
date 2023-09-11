@@ -2,7 +2,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 interface Flashcard {
