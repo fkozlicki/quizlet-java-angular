@@ -21,7 +21,7 @@ public class FolderController {
     @PostMapping("/create")
     ResponseEntity<FolderDTO> createFolder(
             @RequestBody FolderDTO folder,
-           @RequestHeader("Authorization") String authHeader
+            @RequestHeader("Authorization") String authHeader
     ) {
         String jwt = authHeader.substring(7);
         User user = userService.getUserByEmail(jwtService.extractUsername(jwt));
