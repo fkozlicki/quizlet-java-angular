@@ -14,24 +14,32 @@ import { PicturePlaceholderComponent } from 'src/app/components/picture-placehol
         <div class="mb-4 flex items-center gap-4 lg:basis-48 lg:flex-col">
           <div class="text-xl font-semibold">Profile Picture</div>
           <img
-            *ngIf="user.imageUrl"
-            [ngSrc]="
-              'http://localhost:8080/api/v1/user/profile-image/' + user.imageUrl
-            "
+            *ngIf="imageUrl"
+            [ngSrc]="imageUrl"
             alt="profile image"
             width="80"
             height="80"
+            class="rounded-full"
           />
           <app-picture-placeholder
-            *ngIf="!user.imageUrl"
+            *ngIf="!imageUrl"
             [size]="'large'"
           ></app-picture-placeholder>
         </div>
         <div class="flex-1 rounded-lg bg-white p-4 shadow">
-          <div>Choose your profile picture</div>
+          <div class="mb-4">Choose your profile picture</div>
           <div class="flex flex-wrap gap-2">
-            <button>
-              <img />
+            <button
+              *ngFor="let image of images"
+              class="overflow-hidden rounded-full"
+              (click)="changeImage(image)"
+            >
+              <img
+                [ngSrc]="'/assets/images/' + image"
+                alt=""
+                width="48"
+                height="48"
+              />
             </button>
           </div>
           <div class="mb-4 flex items-center">
@@ -60,12 +68,32 @@ import { PicturePlaceholderComponent } from 'src/app/components/picture-placehol
   styles: [],
 })
 export class SettingsComponent {
-  user = this.sessionService.user!;
+  imageUrl = this.sessionService.user!.imageUrl;
+  images = ['bear.jpg', 'cat.jpg', 'owl.jpg', 'flaming.jpg'];
 
   constructor(
     private userService: UserService,
     public sessionService: SessionService,
   ) {}
+
+  changeImage(image: string) {
+    const imageUrl = `/assets/images/${image}`;
+
+    this.userService
+      .editUser()
+      .mutate({
+        id: this.sessionService.user!.id,
+        imageUrl,
+      })
+      .then(() => {
+        this.sessionService.saveUser({
+          ...this.sessionService.user!,
+          imageUrl: imageUrl,
+        });
+
+        this.imageUrl = imageUrl;
+      });
+  }
 
   onChange(event: any) {
     const file = event.target.files[0];
@@ -89,7 +117,7 @@ export class SettingsComponent {
                   imageUrl: result.data.imageUrl,
                 });
 
-                this.user = this.sessionService.user!;
+                this.imageUrl = result.data.imageUrl;
               }
             });
         })

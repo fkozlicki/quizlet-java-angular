@@ -1,12 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { PicturePlaceholderComponent } from '../picture-placeholder/picture-placeholder.component';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-studyset-preview',
   standalone: true,
-  imports: [CommonModule, PicturePlaceholderComponent, RouterModule],
+  imports: [
+    CommonModule,
+    PicturePlaceholderComponent,
+    RouterModule,
+    NgOptimizedImage,
+  ],
   template: `
     <a
       [routerLink]="'/study-set/' + id"
@@ -21,7 +26,18 @@ import { RouterModule } from '@angular/router';
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <app-picture-placeholder [size]="'small'"></app-picture-placeholder>
+        <img
+          *ngIf="imageUrl"
+          [ngSrc]="imageUrl"
+          alt=""
+          width="24"
+          height="24"
+          class="rounded-full"
+        />
+        <app-picture-placeholder
+          *ngIf="!imageUrl"
+          [size]="'small'"
+        ></app-picture-placeholder>
         <div>{{ userName }}</div>
       </div>
     </a>
@@ -33,4 +49,5 @@ export class StudysetPreviewComponent {
   @Input() title!: string;
   @Input() termsCount!: number;
   @Input() userName!: string;
+  @Input() imageUrl!: string | null;
 }

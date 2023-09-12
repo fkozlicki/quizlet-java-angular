@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { SubscribeDirective } from '@ngneat/subscribe';
@@ -13,15 +13,30 @@ import { PicturePlaceholderComponent } from '../picture-placeholder/picture-plac
     SubscribeDirective,
     PicturePlaceholderComponent,
     RouterModule,
+    NgOptimizedImage,
   ],
   template: `
     <div class="m-auto flex h-full max-w-7xl flex-col">
       <div *subscribe="userQuery$ as userQuery">
         <div *ngIf="userQuery.data as user">
           <div class="mb-6 flex items-center gap-6">
-            <app-picture-placeholder [size]="'large'"></app-picture-placeholder>
+            <img
+              *ngIf="user.imageUrl"
+              [ngSrc]="user.imageUrl"
+              alt=""
+              width="64"
+              height="64"
+              class="rounded-full"
+            />
+            <app-picture-placeholder
+              *ngIf="!user.imageUrl"
+              [size]="'large'"
+            ></app-picture-placeholder>
             <div>
-              <div>{{ user.name }}</div>
+              <div class="text-2xl font-bold">{{ user.name }}</div>
+              <div class="text-base font-medium text-gray-400">
+                {{ user.name }}
+              </div>
             </div>
           </div>
           <div class="mb-8 border-b-2">

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { UserLayoutComponent } from 'src/app/components/user-layout/user-layout.component';
 import { StudySetService } from 'src/app/services/study-set.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RouterModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    NgOptimizedImage,
   ],
   template: `
     <app-user-layout>
@@ -45,13 +46,23 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
               [routerLink]="['/study-set', studySet.id]"
               class="rounded bg-white p-3 shadow-md"
             >
-              <div class="flex items-center gap-8">
+              <div class="flex items-center gap-4">
                 <div class="font-medium">
                   {{ studySet.flashcards.length }} terms
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="h-4 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-1">
+                  <img
+                    *ngIf="studySet.user.imageUrl as imageUrl"
+                    [ngSrc]="imageUrl"
+                    alt=""
+                    width="16"
+                    height="16"
+                    class="rounded-full"
+                  />
                   <app-picture-placeholder
-                    [size]="'small'"
+                    *ngIf="!studySet.user.imageUrl"
+                    [size]="'xs'"
                   ></app-picture-placeholder>
                   <div>{{ studySet.user.name }}</div>
                 </div>

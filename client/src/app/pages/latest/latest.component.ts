@@ -35,6 +35,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
             [title]="studySet.title"
             [termsCount]="studySet.flashcards.length"
             [userName]="studySet.user.name"
+            [imageUrl]="studySet.user.imageUrl"
           ></app-studyset-preview>
         </div>
         <div

@@ -93,9 +93,18 @@ import { FolderModalComponent } from '../folder-modal/folder-modal.component';
             </div>
           </mat-menu>
         </div>
-        <div *ngIf="sessionService.user" class="px-2">
+        <div *ngIf="sessionService.user as user" class="px-2">
           <button [matMenuTriggerFor]="userMenu">
+            <img
+              *ngIf="user.imageUrl"
+              [ngSrc]="user.imageUrl"
+              alt=""
+              width="40"
+              height="40"
+              class="rounded-full"
+            />
             <app-picture-placeholder
+              *ngIf="!user.imageUrl"
               [size]="'medium'"
             ></app-picture-placeholder>
           </button>

@@ -34,7 +34,7 @@ import { StudySetTermsComponent } from 'src/app/components/study-set-terms/study
         ></app-flashcards-swiper>
         <app-study-set-cta
           [setId]="studySet.id"
-          [authorName]="studySet.user.name"
+          [user]="studySet.user"
         ></app-study-set-cta>
         <app-study-set-terms
           [flashcards]="studySet.flashcards"
