@@ -32,6 +32,16 @@ export class UserService {
     );
   }
 
+  editUser() {
+    return this.useMutation(
+      ({ id, imageUrl }: { id: number; imageUrl: string }) =>
+        this.http.put(`${this.apiUrl}/edit`, {
+          id,
+          imageUrl,
+        }),
+    );
+  }
+
   uploadPicture() {
     return this.useMutation(({ formData }: { formData: FormData }) =>
       this.http.post(`${this.apiUrl}/profile-image`, formData, {
