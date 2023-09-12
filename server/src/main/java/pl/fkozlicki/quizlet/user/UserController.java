@@ -25,6 +25,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
+    @PutMapping("/edit")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok().body(userService.editUser(userDTO));
+    }
+
     @PostMapping(
             value = "/profile-image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
