@@ -10,24 +10,38 @@ import { MatIconModule } from '@angular/material/icon';
     <div
       class="flex items-center justify-center rounded-full bg-slate-500"
       [ngClass]="{
+        'h-4 w-4': size === 'xs',
         'h-6 w-6': size === 'small',
         'h-10 w-10': size === 'medium',
         'h-12 w-12': size === 'large'
       }"
     >
       <mat-icon
-        [ngClass]="{
-          'h-2 w-2': size === 'small',
-          'h-10 w-10': size === 'medium',
-          'h-12 w-12': size === 'large'
-        }"
         [ngStyle]="{
           width:
-            size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px',
+            size === 'xs'
+              ? '12px'
+              : size === 'small'
+              ? '16px'
+              : size === 'medium'
+              ? '20px'
+              : '24px',
           height:
-            size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px',
+            size === 'xs'
+              ? '12px'
+              : size === 'small'
+              ? '16px'
+              : size === 'medium'
+              ? '20px'
+              : '24px',
           'font-size':
-            size === 'small' ? '16px' : size === 'medium' ? '20px' : '24px'
+            size === 'xs'
+              ? '12px'
+              : size === 'small'
+              ? '16px'
+              : size === 'medium'
+              ? '20px'
+              : '24px'
         }"
         class="text-white"
         fontIcon="person_outline"
@@ -37,5 +51,5 @@ import { MatIconModule } from '@angular/material/icon';
   styles: [],
 })
 export class PicturePlaceholderComponent {
-  @Input() size!: 'small' | 'medium' | 'large';
+  @Input() size!: 'small' | 'medium' | 'large' | 'xs';
 }
