@@ -5,11 +5,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.fkozlicki.quizlet.exception.DuplicateResourceException;
 import pl.fkozlicki.quizlet.exception.ResourceNotFoundException;
 import pl.fkozlicki.quizlet.s3.S3Service;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -62,6 +69,22 @@ public class UserService {
         return userDTOMapper.apply(user);
     }
 
+    public UserDTO editUser(UserDTO userDTO) {
+        User user = userRepository.
+                findById(userDTO.id())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Couldn't find user with id: %d".formatted(userDTO.id())
+                ));
+
+        if (userDTO.imageUrl() != null) {
+            user.setImageUrl(userDTO.imageUrl());
+        }
+
+        userRepository.save(user);
+
+        return userDTOMapper.apply(user);
+    }
+
     public void uploadUserProfileImage(Integer userId, MultipartFile file) {
         User user = userRepository.
                 findById(userId)
@@ -78,7 +101,10 @@ public class UserService {
                     file.getBytes()
             );
 
-            user.setImageUrl(profileImageId);
+            String imageUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath().path("").toUriString() + "/api/v1/user/profile-image/" + profileImageId;
+
+            user.setImageUrl(imageUrl);
 
             userRepository.save(user);
         } catch (IOException e) {
@@ -88,9 +114,33 @@ public class UserService {
     }
     public byte[] getUserProfileImage(String imageUrl) {
 
-        return s3Service.getObject(
+        byte[] s3Image = s3Service.getObject(
                 bucketName,
                 imageUrl
         );
+
+        InputStream imageInputStream = new ByteArrayInputStream(s3Image);
+
+        try {
+            BufferedImage originalImage = ImageIO.read(imageInputStream);
+            int squareSize = Math.min(originalImage.getHeight(), originalImage.getWidth());
+
+            int x = (originalImage.getWidth() - squareSize) / 2;
+            int y = (originalImage.getHeight() - squareSize) / 2;
+
+            BufferedImage squareImage = originalImage.getSubimage(x, y, squareSize, squareSize);
+
+            BufferedImage resizedImage = new BufferedImage(96, 96, BufferedImage.TYPE_INT_BGR);
+            Graphics2D graphics = resizedImage.createGraphics();
+            graphics.drawImage(squareImage, 0, 0, 96, 96, null);
+            graphics.dispose();
+
+            ByteArrayOutputStream resizedImageOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(resizedImage, "jpg", resizedImageOutputStream);
+
+            return resizedImageOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get profile image", e);
+        }
     }
 }
