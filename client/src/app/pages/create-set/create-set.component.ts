@@ -103,6 +103,12 @@ import { Router } from '@angular/router';
             <div
               class="flex flex-col bg-white p-4 pt-0 sm:flex-row sm:gap-10 md:p-6 md:pt-0"
             >
+              <input
+                formControlName="place"
+                [value]="i"
+                type="text"
+                class="hidden"
+              />
               <div class="relative z-20 flex-1 pt-5">
                 <div
                   (mouseover)="isDragDisabled = true"
@@ -145,7 +151,7 @@ import { Router } from '@angular/router';
           </div>
         </div>
         <button
-          (click)="addFlashcard()"
+          (click)="addFlashcard(flashcards.length)"
           type="button"
           class="group mb-8 flex w-full justify-center rounded-md bg-white p-4 shadow md:py-8"
         >
@@ -190,7 +196,7 @@ export class CreateSetComponent implements OnInit {
 
   ngOnInit(): void {
     for (let i = 0; i < 5; i++) {
-      this.addFlashcard();
+      this.addFlashcard(i);
     }
   }
 
@@ -212,11 +218,12 @@ export class CreateSetComponent implements OnInit {
       });
   }
 
-  addFlashcard() {
+  addFlashcard(index: number) {
     const flashcardGroup = new FormGroup(
       {
         term: new FormControl(''),
         definition: new FormControl(''),
+        place: new FormControl(index),
       },
       {
         validators: this.requireAtLeastOneFieldFilled,
@@ -243,5 +250,9 @@ export class CreateSetComponent implements OnInit {
       event.previousIndex,
       event.currentIndex,
     );
+
+    this.flashcards.controls.forEach((control, index) => {
+      control.get('place')?.setValue(index);
+    });
   }
 }

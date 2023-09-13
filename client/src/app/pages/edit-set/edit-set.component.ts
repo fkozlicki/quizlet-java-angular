@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -37,7 +37,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
     <div class="m-auto max-w-7xl p-4 sm:p-10">
       <div class="mb-8 flex items-center justify-between">
         <a
-          [routerLink]="['/study-set', id]"
+          [routerLink]="['/study-set', setId]"
           class="text-base font-medium text-blue-600 hover:text-blue-700"
           >Back to set</a
         >
@@ -109,6 +109,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
             <div
               class="flex flex-col bg-white p-4 pt-0 sm:flex-row sm:gap-10 md:p-6 md:pt-0"
             >
+              <input formControlName="place" type="text" class="hidden" />
               <div class="relative z-20 flex-1 pt-5">
                 <div
                   (mouseover)="isDragDisabled = true"
@@ -177,11 +178,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   styles: ['.cdk-drag-placeholder { opacity: 0; }'],
 })
 export class EditSetComponent implements OnInit {
-  id = +this.route.snapshot.paramMap.get('setId')!;
+  setId = +this.route.snapshot.paramMap.get('setId')!;
   isDragDisabled = false;
   editStudySetMutation$ = this.studySetService.editStudySet();
   studySetForm: FormGroup = new FormGroup({
-    id: new FormControl<number | undefined>(undefined, {
+    id: new FormControl<number | undefined>(1, {
       validators: [Validators.required],
     }),
     title: new FormControl<string | undefined>(undefined, {
@@ -200,25 +201,23 @@ export class EditSetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.studySetService
-        .getStudySet(+params['setId'])
-        .result$.subscribe(({ data }) => {
-          if (data) {
-            const { id, title, description, flashcards } = data;
-            this.studySetForm.controls['id'].setValue(id);
-            this.studySetForm.controls['title'].setValue(title);
-            this.studySetForm.controls['description'].setValue(description);
-            flashcards.forEach((flashcard) => {
-              (this.studySetForm.controls['flashcards'] as FormArray).push(
-                new FormGroup({
-                  term: new FormControl(flashcard.term),
-                  definition: new FormControl(flashcard.definition),
-                }),
-              );
-            });
-          }
+    this.studySetService.getStudySet2(this.setId).subscribe((data) => {
+      if (data) {
+        const { id, title, description, flashcards } = data;
+        this.studySetForm.controls['id'].setValue(id);
+        this.studySetForm.controls['title'].setValue(title);
+        this.studySetForm.controls['description'].setValue(description);
+
+        flashcards.forEach((flashcard) => {
+          this.flashcards.push(
+            new FormGroup({
+              term: new FormControl(flashcard.term),
+              definition: new FormControl(flashcard.definition),
+              place: new FormControl(flashcard.place),
+            }),
+          );
         });
+      }
     });
   }
 
@@ -269,5 +268,9 @@ export class EditSetComponent implements OnInit {
       event.previousIndex,
       event.currentIndex,
     );
+
+    this.flashcards.controls.forEach((control, index) => {
+      control.get('place')?.setValue(index);
+    });
   }
 }
