@@ -52,6 +52,10 @@ export class StudySetService {
     );
   }
 
+  getStudySet2(id: number) {
+    return this.http.get<StudySet>(`${this.apiUrl}/${id}`);
+  }
+
   deleteStudySet() {
     return this.useMutation((id: number) =>
       this.http.delete(`${this.apiUrl}/${id}`),
