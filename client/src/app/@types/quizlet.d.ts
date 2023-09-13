@@ -9,6 +9,7 @@ interface Flashcard {
   id: number;
   term: string;
   definition: string;
+  place: number;
 }
 
 interface StudySet {

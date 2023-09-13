@@ -24,6 +24,7 @@ public class StudySet {
     private String title;
     private String description;
     @OneToMany(cascade = CascadeType.REMOVE)
+    @OrderBy("place  ASC")
     private List<Flashcard> flashcards;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

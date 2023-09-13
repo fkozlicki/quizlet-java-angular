@@ -11,7 +11,8 @@ public class FlashcardDTOMapper implements Function<Flashcard, FlashcardDTO> {
         return new FlashcardDTO(
                 flashcard.getId(),
                 flashcard.getTerm(),
-                flashcard.getDefinition()
+                flashcard.getDefinition(),
+                flashcard.getPlace()
         );
     }
 }

@@ -12,7 +12,7 @@ export class FlashcardService {
   constructor(private http: HttpClient) {}
 
   editFlashcard() {
-    return this.useMutation((body: Flashcard) =>
+    return this.useMutation((body: Omit<Flashcard, 'place'>) =>
       this.http.put<Flashcard>(`${this.apiUrl}/edit`, body),
     );
   }
