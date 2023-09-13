@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fkozlicki.quizlet.exception.ResourceNotFoundException;
 import pl.fkozlicki.quizlet.flashcard.Flashcard;
+import pl.fkozlicki.quizlet.flashcard.FlashcardDTO;
 import pl.fkozlicki.quizlet.flashcard.FlashcardRepository;
+import pl.fkozlicki.quizlet.user.User;
 import pl.fkozlicki.quizlet.user.UserRepository;
 
 import java.util.ArrayList;
@@ -20,35 +22,38 @@ public class StudySetService {
     private final UserRepository userRepository;
     private final FlashcardRepository flashcardRepository;
 
-    public StudySetDTO createStudySet(StudySetDTO studySet, Integer userId) {
-        List<Flashcard> flashcards = flashcardRepository.saveAll(
-                studySet
-                        .flashcards()
-                        .stream()
+    private List<Flashcard> saveFlashcards(List<FlashcardDTO> flashcardDTOList) {
+        return flashcardRepository.saveAll(
+                flashcardDTOList.stream()
                         .map(flashcard -> Flashcard
                                 .builder()
                                 .term(flashcard.term())
                                 .definition(flashcard.definition())
+                                .place(flashcard.place())
                                 .build()
                         )
                         .collect(Collectors.toList())
         );
+    }
 
-        StudySet newStudySet = studySetRepository.save(
-                StudySet.
-                        builder()
-                        .title(studySet.title())
-                        .description(studySet.description())
-                        .flashcards(flashcards)
-                        .user(userRepository
-                                .findById(userId)
-                                .orElseThrow(() -> new ResourceNotFoundException(""))
-                        )
-                        .folders(new ArrayList<>())
-                        .build()
-        );
+    public StudySetDTO createStudySet(StudySetDTO studySet, Integer userId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        return studySetDTOMapper.apply(newStudySet);
+        StudySet newStudySet = StudySet.builder()
+                .title(studySet.title())
+                .description(studySet.description())
+                .user(user)
+                .folders(new ArrayList<>())
+                .build();
+
+
+        List<Flashcard> flashcards = saveFlashcards(studySet.flashcards());
+
+        newStudySet.setFlashcards(flashcards);
+
+        return studySetDTOMapper.apply(studySetRepository.save(newStudySet));
     }
 
     public void deleteStudySet(Integer id) {
@@ -86,25 +91,12 @@ public class StudySetService {
         studySetToEdit.setTitle(studySet.title());
         studySetToEdit.setDescription(studySet.description());
 
-        flashcardRepository.deleteAllByStudySetId(studySetToEdit.getId());
+        flashcardRepository.deleteAllByStudySetId(studySet.id());
 
-        List<Flashcard> flashcards = flashcardRepository.saveAll(
-                studySet
-                        .flashcards()
-                        .stream()
-                        .map(flashcard -> Flashcard
-                                .builder()
-                                .term(flashcard.term())
-                                .definition(flashcard.definition())
-                                .build()
-                        )
-                        .collect(Collectors.toList())
-        );
+        List<Flashcard> flashcards = saveFlashcards(studySet.flashcards());
 
         studySetToEdit.setFlashcards(flashcards);
 
-        StudySet editedStudySet = studySetRepository.save(studySetToEdit);
-
-        return studySetDTOMapper.apply(editedStudySet);
+        return studySetDTOMapper.apply(studySetRepository.save(studySetToEdit));
     }
 }
