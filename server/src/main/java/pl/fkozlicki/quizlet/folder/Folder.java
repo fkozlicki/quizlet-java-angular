@@ -19,11 +19,15 @@ public class Folder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false)
     private String name;
+
     private String description;
+
     @ManyToMany
     private List<StudySet> studySets;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

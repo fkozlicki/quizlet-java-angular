@@ -16,9 +16,13 @@ public class Flashcard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String term;
+
     private String definition;
+
     private Integer place;
+
     @ManyToOne
     private StudySet studySet;
 }

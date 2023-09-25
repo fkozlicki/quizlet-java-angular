@@ -20,17 +20,23 @@ public class StudySet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false)
     private String title;
+
     private String description;
     @OneToMany(cascade = CascadeType.REMOVE)
+
     @OrderBy("place  ASC")
     private List<Flashcard> flashcards;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
     @ManyToMany(mappedBy = "studySets")
     private List<Folder> folders;
+
     @PreRemove
     private void removeStudySetFromFolders() {
         for (Folder folder : folders) {
