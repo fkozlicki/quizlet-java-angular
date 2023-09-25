@@ -1,10 +1,10 @@
 package pl.fkozlicki.quizlet.studyset;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fkozlicki.quizlet.exception.ResourceNotFoundException;
 import pl.fkozlicki.quizlet.flashcard.Flashcard;
-import pl.fkozlicki.quizlet.flashcard.FlashcardDTO;
 import pl.fkozlicki.quizlet.flashcard.FlashcardRepository;
 import pl.fkozlicki.quizlet.user.User;
 import pl.fkozlicki.quizlet.user.UserRepository;
@@ -22,38 +22,37 @@ public class StudySetService {
     private final UserRepository userRepository;
     private final FlashcardRepository flashcardRepository;
 
-    private List<Flashcard> saveFlashcards(List<FlashcardDTO> flashcardDTOList) {
-        return flashcardRepository.saveAll(
-                flashcardDTOList.stream()
+    public StudySetDTO createStudySet(StudySetDTO studySetDTO, Integer userId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        StudySet savedSet = studySetRepository.save(
+                StudySet.builder()
+                .title(studySetDTO.title())
+                .description(studySetDTO.description())
+                .user(user)
+                .folders(new ArrayList<>())
+                .build()
+        );
+
+        List<Flashcard> savedFlashcards = flashcardRepository.saveAll(
+                studySetDTO.flashcards()
+                        .stream()
                         .map(flashcard -> Flashcard
                                 .builder()
                                 .term(flashcard.term())
                                 .definition(flashcard.definition())
                                 .place(flashcard.place())
+                                .studySet(savedSet)
                                 .build()
                         )
                         .collect(Collectors.toList())
         );
-    }
 
-    public StudySetDTO createStudySet(StudySetDTO studySet, Integer userId) {
-        User user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        savedSet.setFlashcards(savedFlashcards);
 
-        StudySet newStudySet = StudySet.builder()
-                .title(studySet.title())
-                .description(studySet.description())
-                .user(user)
-                .folders(new ArrayList<>())
-                .build();
-
-
-        List<Flashcard> flashcards = saveFlashcards(studySet.flashcards());
-
-        newStudySet.setFlashcards(flashcards);
-
-        return studySetDTOMapper.apply(studySetRepository.save(newStudySet));
+        return studySetDTOMapper.apply(savedSet);
     }
 
     public void deleteStudySet(Integer id) {
@@ -79,6 +78,7 @@ public class StudySetService {
                 ));
     }
 
+    @Transactional
     public StudySetDTO editStudySet(StudySetDTO studySet) {
 
         StudySet studySetToEdit = studySetRepository.
@@ -91,12 +91,26 @@ public class StudySetService {
         studySetToEdit.setTitle(studySet.title());
         studySetToEdit.setDescription(studySet.description());
 
+        studySetRepository.save(studySetToEdit);
+
         flashcardRepository.deleteAllByStudySetId(studySet.id());
 
-        List<Flashcard> flashcards = saveFlashcards(studySet.flashcards());
+        List<Flashcard> savedFlashcards = flashcardRepository.saveAll(
+                studySet.flashcards()
+                        .stream()
+                        .map(flashcard -> Flashcard
+                                .builder()
+                                .term(flashcard.term())
+                                .definition(flashcard.definition())
+                                .place(flashcard.place())
+                                .studySet(studySetToEdit)
+                                .build()
+                        )
+                        .collect(Collectors.toList())
+        );
 
-        studySetToEdit.setFlashcards(flashcards);
+        studySetToEdit.setFlashcards(savedFlashcards);
 
-        return studySetDTOMapper.apply(studySetRepository.save(studySetToEdit));
+        return studySetDTOMapper.apply(studySetToEdit);
     }
 }
