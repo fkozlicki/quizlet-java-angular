@@ -25,13 +25,13 @@ public class StudySet {
     private String title;
 
     private String description;
-    @OneToMany(cascade = CascadeType.REMOVE)
 
     @OrderBy("place  ASC")
+    @OneToMany(mappedBy = "studySet", cascade = CascadeType.REMOVE)
     private List<Flashcard> flashcards;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "_user_id", nullable = false)
     private User user;
 
     @ManyToMany(mappedBy = "studySets")

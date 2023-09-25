@@ -24,5 +24,6 @@ public class Flashcard {
     private Integer place;
 
     @ManyToOne
+    @JoinColumn(name = "study_set_id")
     private StudySet studySet;
 }

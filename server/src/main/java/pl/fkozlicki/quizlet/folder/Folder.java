@@ -26,6 +26,11 @@ public class Folder {
     private String description;
 
     @ManyToMany
+    @JoinTable(
+            name = "folder_study_sets",
+            joinColumns = @JoinColumn(name = "folder_id"),
+            inverseJoinColumns = @JoinColumn(name = "study_set_id")
+    )
     private List<StudySet> studySets;
 
     @ManyToOne
